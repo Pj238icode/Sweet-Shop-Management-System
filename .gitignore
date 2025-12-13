@@ -1,0 +1,57 @@
+############################
+### Spring Boot Configs  ###
+############################
+
+# Exclude sensitive config files
+application.properties
+application.yml
+application-dev.properties
+application-test.properties
+application-prod.properties
+.env
+
+############################
+### Maven / Build Files  ###
+############################
+
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+############################
+### STS ###
+############################
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+############################
+### IntelliJ IDEA ###
+############################
+.idea
+*.iws
+*.iml
+*.ipr
+
+############################
+### NetBeans ###
+############################
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+############################
+### VS Code ###
+############################
+.vscode/
