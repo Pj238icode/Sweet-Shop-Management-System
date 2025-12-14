@@ -73,13 +73,6 @@ class InventoryServiceTest {
 
     @Test
     void shouldThrowExceptionWhenQuantityIsZeroOrNegative() {
-        Sweet sweet = Sweet.builder()
-                .id(1L)
-                .quantity(10)
-                .build();
-
-        when(sweetRepository.findById(1L))
-                .thenReturn(Optional.of(sweet));
 
         assertThrows(IllegalArgumentException.class,
                 () -> inventoryService.purchaseSweet(1L, 0));
@@ -88,3 +81,4 @@ class InventoryServiceTest {
                 () -> inventoryService.purchaseSweet(1L, -2));
     }
 }
+
