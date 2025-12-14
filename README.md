@@ -75,5 +75,72 @@ Secured Endpoints
 | `/api/dashboard/**`    | ADMIN        |
 
 
+📦 Core Features
+
+User Registration & Login
+
+JWT + Refresh Token Authentication
+
+Sweet CRUD Operations
+
+Inventory Management (Purchase & Restock)
+
+Dashboard Analytics
+
+Image Upload to AWS S3
+
+Production-grade CORS configuration
+
+Dockerized deployment
+
+
+🧪 Testing Strategy
+
+Unit Tests
+
+Service layer fully tested
+
+Mockito used for dependency isolation
+
+SecurityContext mocked where required
+
+Coverage
+
+AuthService
+
+SweetService
+
+InventoryService
+
+RefreshTokenService
+
+DashboardService
+
+ImageService
+
+Tests follow Red → Green → Refactor methodology.
+
+
+⚙️ Environment Configuration
+
+All sensitive values are injected via environment variables.
+
+DB_URL=jdbc:mysql://<host>:3306/sweetshop
+DB_USERNAME=your_db_user
+DB_PASSWORD=your_db_password
+
+JWT_SECRET_KEY=your_jwt_secret
+JWT_EXPIRATION=7200000
+JWT_REFRESH_EXPIRATION=604800000
+
+AWS_ACCESS_KEY=your_access_key
+AWS_SECRET_KEY=your_secret_key
+AWS_REGION=ap-south-1
+AWS_BUCKET=your_bucket_name
+
+
+
+
+
 
 
