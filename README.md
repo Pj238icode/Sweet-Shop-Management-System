@@ -159,6 +159,18 @@ docker build -t sweet-shop-backend .
 docker run -p 8080:8080 sweet-shop-backend
 ```
 
+📁 Project Structure
+```
+src/main/java
+├── controller
+├── service
+├── repository
+├── entity
+├── security
+├── config
+└── exception
+```
+
 
 
 
