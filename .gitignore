@@ -3,11 +3,9 @@
 ############################
 
 # Exclude sensitive config files
-application.properties
-application.yml
+
 application-dev.properties
 application-test.properties
-application-prod.properties
 .env
 
 ############################
