@@ -3,15 +3,17 @@ package com.boot.backend.Sweet.Shop.Management.System.service;
 import com.boot.backend.Sweet.Shop.Management.System.dto.request.SweetRequest;
 import com.boot.backend.Sweet.Shop.Management.System.dto.response.SweetResponse;
 import com.boot.backend.Sweet.Shop.Management.System.entity.Sweet;
+import com.boot.backend.Sweet.Shop.Management.System.entity.User;
 import com.boot.backend.Sweet.Shop.Management.System.exception.SweetNotFoundException;
 import com.boot.backend.Sweet.Shop.Management.System.repository.SweetRepository;
+import com.boot.backend.Sweet.Shop.Management.System.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.List;
 
 @Service
@@ -35,6 +37,7 @@ public class SweetServiceImpl implements SweetService {
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
                 .imageUrl(imageUrl)
+                .createdBy(getCurrentUser())
                 .build();
 
         sweetRepository.save(sweet);
@@ -112,4 +115,19 @@ public class SweetServiceImpl implements SweetService {
                 .imageUrl(sweet.getImageUrl())
                 .build();
     }
+
+
+
+    private User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        if (principal instanceof CustomUserDetails userDetails) {
+            return userDetails.getUser();
+        }
+
+        throw new RuntimeException("Unauthorized");
+    }
+
 }

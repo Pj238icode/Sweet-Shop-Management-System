@@ -112,8 +112,7 @@ public class SecurityConfig {
 
         corsConfiguration.setAllowedOrigins(
                 java.util.List.of(
-                        "http://localhost:3000",   // React
-                        "http://localhost:5173"
+                        "https://sweet-management.netlify.app"
                 )
 
         );

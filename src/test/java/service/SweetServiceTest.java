@@ -2,17 +2,27 @@ package service;
 
 import com.boot.backend.Sweet.Shop.Management.System.dto.request.SweetRequest;
 import com.boot.backend.Sweet.Shop.Management.System.dto.response.SweetResponse;
+import com.boot.backend.Sweet.Shop.Management.System.entity.Role;
 import com.boot.backend.Sweet.Shop.Management.System.entity.Sweet;
+import com.boot.backend.Sweet.Shop.Management.System.entity.User;
 import com.boot.backend.Sweet.Shop.Management.System.exception.SweetNotFoundException;
 import com.boot.backend.Sweet.Shop.Management.System.repository.SweetRepository;
+import com.boot.backend.Sweet.Shop.Management.System.security.CustomUserDetails;
 import com.boot.backend.Sweet.Shop.Management.System.service.ImageService;
 import com.boot.backend.Sweet.Shop.Management.System.service.SweetServiceImpl;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -35,11 +45,40 @@ class SweetServiceImplTest {
     private SweetServiceImpl sweetService;
 
     // =====================================================
+    // SECURITY CONTEXT MOCK
+    // =====================================================
+
+    private void mockAuthenticatedUser() {
+        User admin = User.builder()
+                .id(1L)
+                .email("admin@test.com")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        CustomUserDetails userDetails = new CustomUserDetails(admin);
+
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        SecurityContextHolder.setContext(securityContext);
+    }
+
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
+
+    // =====================================================
     // ADD SWEET
     // =====================================================
 
     @Test
     void shouldAddSweetSuccessfully() {
+        mockAuthenticatedUser(); // ✅ REQUIRED
+
         SweetRequest request = new SweetRequest(
                 "Ladoo",
                 "Indian",
@@ -55,7 +94,8 @@ class SweetServiceImplTest {
         when(sweetRepository.save(any(Sweet.class)))
                 .thenAnswer(inv -> inv.getArgument(0));
 
-        SweetResponse response = sweetService.addSweet(request, image);
+        SweetResponse response =
+                sweetService.addSweet(request, image);
 
         assertNotNull(response);
         assertEquals("Ladoo", response.getName());
