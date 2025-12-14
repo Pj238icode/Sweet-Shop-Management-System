@@ -32,3 +32,48 @@ JUnit 5 & Mockito (Testing)
 Docker (Deployment)
 
 Render (Production hosting)
+
+
+📐 Architecture Overview
+
+Controller Layer – Handles HTTP requests
+
+Service Layer – Business logic
+
+Repository Layer – Data persistence (JPA)
+
+Security Layer
+
+JWT Filter
+
+Role-based access control
+
+Cloud Integration
+
+AWS S3 for image storage
+
+🔐 Authentication & Authorization
+
+JWT Access Token
+
+Refresh Token flow
+
+Roles
+
+ROLE_ADMIN
+
+ROLE_USER
+
+Secured Endpoints
+| Endpoint               | Access       |
+| ---------------------- | ------------ |
+| `/api/auth/**`         | Public       |
+| `/api/sweets/add`      | ADMIN        |
+| `/api/sweets/update`   | ADMIN        |
+| `/api/sweets/delete`   | ADMIN        |
+| `/api/sweets/purchase` | USER / ADMIN |
+| `/api/dashboard/**`    | ADMIN        |
+
+
+
+
