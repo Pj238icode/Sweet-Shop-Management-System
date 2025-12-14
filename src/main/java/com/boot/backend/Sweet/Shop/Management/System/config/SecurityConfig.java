@@ -54,20 +54,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
+
+                        // PUBLIC
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // Admin-only sweet management
+
+                        .requestMatchers(HttpMethod.GET, "/api/sweets/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        // ADMIN ONLY
                         .requestMatchers(HttpMethod.POST, "/api/sweets")
                         .hasRole("ADMIN")
 
@@ -80,19 +87,23 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/sweets/*/restock")
                         .hasRole("ADMIN")
 
-                        // Purchase allowed for authenticated users
+                        // DASHBOARD (ADMIN ONLY)
+                        .requestMatchers(HttpMethod.GET, "/api/dashboard/**")
+                        .hasAnyRole("ADMIN","USER")
+
+                        // PURCHASE
                         .requestMatchers(HttpMethod.POST, "/api/sweets/*/purchase")
-                        .authenticated()
+                        .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest()
                         .authenticated()
                 )
-
                 .authenticationProvider(authenticationProvider(userDetailsService))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource(){

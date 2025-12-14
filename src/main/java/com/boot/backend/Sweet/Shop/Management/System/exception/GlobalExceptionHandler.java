@@ -102,6 +102,16 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         );
     }
+    // Image Upload Exception
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<?> handleImageUpload(ImageUploadException ex) {
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Image Upload Failed",
+                ex.getMessage()
+        );
+    }
+
 
 
 }

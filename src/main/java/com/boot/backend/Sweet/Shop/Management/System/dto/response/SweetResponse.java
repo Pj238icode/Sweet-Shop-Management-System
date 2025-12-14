@@ -11,4 +11,5 @@ public class SweetResponse {
     private String category;
     private double price;
     private int quantity;
+    private String imageUrl;
 }

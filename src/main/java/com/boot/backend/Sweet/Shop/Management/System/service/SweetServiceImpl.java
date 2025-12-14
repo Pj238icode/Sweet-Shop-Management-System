@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,20 +19,26 @@ import java.util.List;
 public class SweetServiceImpl implements SweetService {
 
     private final SweetRepository sweetRepository;
+    private final ImageService imageService;
 
     @Override
-    public SweetResponse addSweet(SweetRequest request) {
+    public SweetResponse addSweet(SweetRequest request, MultipartFile image) {
+
+        String imageUrl = imageService.uploadImage(image);
+
         Sweet sweet = Sweet.builder()
                 .name(request.getName())
                 .category(request.getCategory())
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
+                .imageUrl(imageUrl)
                 .build();
 
         sweetRepository.save(sweet);
-
         return toResponse(sweet);
     }
+
+
 
     @Override
     public Page<SweetResponse> getAllSweets(
@@ -51,20 +58,33 @@ public class SweetServiceImpl implements SweetService {
     }
 
     @Override
-    public SweetResponse updateSweet(Long id, SweetRequest request) {
+    public SweetResponse updateSweet(
+            Long id,
+            SweetRequest request,
+            MultipartFile image
+    ) {
 
         Sweet sweet = sweetRepository.findById(id)
                 .orElseThrow(() -> new SweetNotFoundException("Sweet not found!"));
 
+        // ===== UPDATE FIELDS =====
         sweet.setName(request.getName());
         sweet.setCategory(request.getCategory());
         sweet.setPrice(request.getPrice());
         sweet.setQuantity(request.getQuantity());
 
+        // ===== UPDATE IMAGE (OPTIONAL) =====
+        if (image != null && !image.isEmpty()) {
+
+            String imageUrl = imageService.uploadImage(image);
+            sweet.setImageUrl(imageUrl);
+        }
+
         sweetRepository.save(sweet);
 
         return toResponse(sweet);
     }
+
 
     @Override
     public void deleteSweet(Long id) {
@@ -92,6 +112,7 @@ public class SweetServiceImpl implements SweetService {
                 .category(sweet.getCategory())
                 .price(sweet.getPrice())
                 .quantity(sweet.getQuantity())
+                .imageUrl(sweet.getImageUrl())
                 .build();
     }
 }

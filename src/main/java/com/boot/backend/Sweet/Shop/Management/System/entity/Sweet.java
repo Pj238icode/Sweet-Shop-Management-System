@@ -27,6 +27,9 @@ public class Sweet {
     @Column(nullable = false)
     private Integer quantity;
 
+    @Column(length = 500)
+    private String imageUrl;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
