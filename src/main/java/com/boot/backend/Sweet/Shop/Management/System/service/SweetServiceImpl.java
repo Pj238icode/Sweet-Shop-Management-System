@@ -24,7 +24,10 @@ public class SweetServiceImpl implements SweetService {
     @Override
     public SweetResponse addSweet(SweetRequest request, MultipartFile image) {
 
-        String imageUrl = imageService.uploadImage(image);
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = imageService.uploadImage(image);
+        }
 
         Sweet sweet = Sweet.builder()
                 .name(request.getName())
@@ -37,6 +40,7 @@ public class SweetServiceImpl implements SweetService {
         sweetRepository.save(sweet);
         return toResponse(sweet);
     }
+
 
 
 
@@ -58,32 +62,25 @@ public class SweetServiceImpl implements SweetService {
     }
 
     @Override
-    public SweetResponse updateSweet(
-            Long id,
-            SweetRequest request,
-            MultipartFile image
-    ) {
+    public SweetResponse updateSweet(Long id, SweetRequest request, MultipartFile image) {
 
         Sweet sweet = sweetRepository.findById(id)
                 .orElseThrow(() -> new SweetNotFoundException("Sweet not found!"));
 
-        // ===== UPDATE FIELDS =====
         sweet.setName(request.getName());
         sweet.setCategory(request.getCategory());
         sweet.setPrice(request.getPrice());
         sweet.setQuantity(request.getQuantity());
 
-        // ===== UPDATE IMAGE (OPTIONAL) =====
-        if (image != null && !image.isEmpty()) {
-
+        if (image != null) {
             String imageUrl = imageService.uploadImage(image);
             sweet.setImageUrl(imageUrl);
         }
 
         sweetRepository.save(sweet);
-
         return toResponse(sweet);
     }
+
 
 
     @Override
