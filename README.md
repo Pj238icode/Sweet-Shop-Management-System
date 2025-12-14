@@ -125,6 +125,7 @@ Tests follow Red → Green → Refactor methodology.
 
 All sensitive values are injected via environment variables.
 
+```
 DB_URL=jdbc:mysql://<host>:3306/sweetshop
 DB_USERNAME=your_db_user
 DB_PASSWORD=your_db_password
