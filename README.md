@@ -137,8 +137,6 @@ Tests follow Red → Green → Refactor methodology.
 [INFO] Running service.SweetServiceImplTest
 [INFO] Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.198 s -- in service.SweetServiceImplTest
 [INFO] 
-[INFO] Results:
-[INFO] 
 [INFO] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0
 [INFO] 
 [INFO] 
