@@ -171,6 +171,46 @@ src/main/java
 └── exception
 ```
 
+🤖 My AI Usage
+AI Tools Used
+
+ChatGPT
+GitHub Copilot
+
+How I Used AI
+
+I used ChatGPT as a development assistant, not as an auto-code generator.
+Specifically, I used it to:
+
+Clarify Spring Security & JWT flow
+
+Design refresh token logic
+
+Improve test coverage using Mockito
+
+Debug CORS and deployment issues
+
+Refine commit messages to follow professional standards
+
+Validate Docker + Render deployment steps
+
+Review code for production best practices
+
+All AI-generated suggestions were manually reviewed, adapted, and integrated into the codebase.
+
+Reflection on AI Impact
+
+AI significantly improved my development speed and code quality, especially during:
+
+Writing unit tests for security-dependent services
+
+Debugging production-only issues (Linux case sensitivity, CORS)
+
+Structuring clean commit history and documentation
+
+However, all architectural decisions, security considerations, and final implementations were made by me.
+AI acted as a pair-programming and learning tool, not a replacement for understanding.
+
 
 
 
