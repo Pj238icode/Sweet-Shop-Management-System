@@ -138,6 +138,27 @@ AWS_ACCESS_KEY=your_access_key
 AWS_SECRET_KEY=your_secret_key
 AWS_REGION=ap-south-1
 AWS_BUCKET=your_bucket_name
+```
+
+🌐 CORS Configuration
+
+CORS is configured at the Spring Security layer to allow requests only from the deployed frontend, ensuring:
+
+Secure cross-origin access
+
+JWT Authorization headers allowed
+
+Preflight requests handled correctly
+
+🐳 Docker Support
+
+The application is fully Dockerized and ready for deployment on Render.
+
+```
+docker build -t sweet-shop-backend .
+docker run -p 8080:8080 sweet-shop-backend
+```
+
 
 
 
