@@ -1,11 +1,15 @@
 package com.boot.backend.Sweet.Shop.Management.System.controller;
 
 import com.boot.backend.Sweet.Shop.Management.System.dto.request.RefreshTokenRequest;
+import com.boot.backend.Sweet.Shop.Management.System.dto.response.ApiResponse;
 import com.boot.backend.Sweet.Shop.Management.System.dto.response.RefreshTokenResponse;
 import com.boot.backend.Sweet.Shop.Management.System.service.RefreshTokenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -14,23 +18,24 @@ public class RefreshTokenController {
 
     private final RefreshTokenService refreshTokenService;
 
-
-    // Refresh Jwt Access Token
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenResponse> refreshToken(
-            @RequestBody RefreshTokenRequest request) {
+    public ResponseEntity<ApiResponse<RefreshTokenResponse>> refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request) {
 
         RefreshTokenResponse response = refreshTokenService.processRefreshToken(request);
-        return ResponseEntity.ok(response);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, response, LocalDateTime.now())
+        );
     }
 
-
-    // Logout User
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<String>> logout(@RequestParam Long userId) {
 
         refreshTokenService.deleteForUser(userId);
 
-        return ResponseEntity.ok("Logged out successfully");
+        return ResponseEntity.ok(
+                new ApiResponse<>(true, "Logged out successfully", LocalDateTime.now())
+        );
     }
 }

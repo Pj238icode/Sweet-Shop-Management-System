@@ -24,5 +24,7 @@ public class User {
 
     private String password;
 
-    private boolean isAdmin;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 }

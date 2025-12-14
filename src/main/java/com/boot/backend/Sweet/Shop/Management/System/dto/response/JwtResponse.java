@@ -15,7 +15,7 @@ public class JwtResponse {
     private Long id;
     private String name;
     private String email;
-    private boolean isAdmin;
+    private String role;
     private String token;
     private String refreshToken;
 

@@ -1,12 +1,12 @@
 package com.boot.backend.Sweet.Shop.Management.System.security;
 
+import com.boot.backend.Sweet.Shop.Management.System.config.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -16,18 +16,10 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@RequiredArgsConstructor
 public class JwtHelper {
 
-    @Value("${security.jwt.secret-key}")
-    private String secretKey;
-
-    @Value("${security.jwt.expiration-time}")
-    private long jwtExpiration;
-
+    private final JwtProperties jwtProperties;
 
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -37,11 +29,10 @@ public class JwtHelper {
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getSignInKey(), Jwts.SIG.HS256)
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration()))
+                .signWith(getSigningKey(), Jwts.SIG.HS256)
                 .compact();
     }
-
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -60,13 +51,12 @@ public class JwtHelper {
         return extractClaim(token, Claims::getExpiration);
     }
 
-
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         return resolver.apply(extractAllClaims(token));
     }
 
     private Claims extractAllClaims(String token) {
-        SecretKey key = getSignInKey();
+        SecretKey key = getSigningKey();
         Jws<Claims> claims = Jwts.parser()
                 .verifyWith(key)
                 .build()
@@ -74,9 +64,8 @@ public class JwtHelper {
         return claims.getPayload();
     }
 
-
-    private SecretKey getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtProperties.getSecretKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }

@@ -1,10 +1,8 @@
 package com.boot.backend.Sweet.Shop.Management.System.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "sweets")
@@ -30,13 +28,8 @@ public class Sweet {
     private Integer quantity;
 
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    @JsonIgnore
     private User createdBy;
-
-
-
-
-
-
 }

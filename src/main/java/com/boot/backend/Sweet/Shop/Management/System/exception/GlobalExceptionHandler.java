@@ -2,6 +2,7 @@ package com.boot.backend.Sweet.Shop.Management.System.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -65,4 +66,42 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleException(Exception ex) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage());
     }
+
+    // Sweet Not Found
+    @ExceptionHandler(SweetNotFoundException.class)
+    public ResponseEntity<?> handleSweetNotFound(SweetNotFoundException ex) {
+        return buildResponse(
+                HttpStatus.NOT_FOUND,
+                "Sweet Not Found",
+                ex.getMessage()
+        );
+    }
+
+    //Validation Errors
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationErrors(MethodArgumentNotValidException ex) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "Validation Failed",
+                errors.toString()
+        );
+    }
+    // Insufficient Stock
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<?> handleInsufficientStock(InsufficientStockException ex) {
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                "Insufficient Stock",
+                ex.getMessage()
+        );
+    }
+
+
 }
